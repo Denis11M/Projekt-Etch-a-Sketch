@@ -1,3 +1,73 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const etchASketch = document.getElementById("etch-a-sketch");
+    const resetbutton = document.getElementById("reset-button");
+    const ctx = etchASketch.getContext("2d");
+    const width = etchASketch.width;
+    const height = etchASketch.height;
+    
+    ctx.lineWidth = 2;
+    
+    let drawing = false;
+
+    // Create a two-dimensional array to store the opacity
+
+    const opacityMap = Array.from(Array(width / 10), () => Array(height / 10).fill(0));
+
+    function getRandomColor() {
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function draw(e) {
+        if(!drawing) return;
+
+        const rect = etchASketch.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left) / 10);
+        const y = Math.floor((e.clientY - rect.top) / 10);
+    
+
+        // Increase the opacity at the current position
+        if (opacityMap[x][y] < 1) {
+            opacityMap[x][y] += 0.1;
+        }
+            ctx.fillStyle = getRandomColor();
+            ctx.globalAlpha = opacityMap[x][y];
+            ctx.fillRect(x * 10, y * 10, 10, 10); // Draw a 10x10 square
+            ctx.globalAlpha = 1.0 // Reset the opacity
+    }
+    
+    function startDrawing() {
+        drawing = true;
+    }
+    
+    function stopDrawing() {
+        drawing = false;
+        ctx.beginPath(); // Start a new path
+    }
+
+    function resetDrwaing() {
+        ctx.clearRect(0, 0, width, height);
+        // Reset the opacity values
+        for (let i = 0; i < width / 10; i++) {
+            for (let j = 0; j < height / 10; i++) {
+                opacityMap[i][j] = 0;
+            }
+        }
+    }
+    
+    etchASketch.addEventListener('mousedown', startDrawing);
+    etchASketch.addEventListener('mouseup', stopDrawing);
+    etchASketch.addEventListener('mousemove', draw);
+    resetbutton.addEventListener('click', resetDrwaing);
+    
+});
+
+
+
+// Project: Etch-a-Sketch without features 
+
 // document.addEventListener("DOMContentLoaded", function () {
 //     const gridContainer = document.getElementById("gridContainer");
 //     const resizeButton = document.getElementById('resizeButton');
@@ -56,53 +126,3 @@
 //     // Create standard grid
 //     createGrid(16);
 // });
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const etchASketch = document.getElementById("etch-a-sketch");
-    const resetbutton = document.getElementById("reset-button");
-    const ctx = etchASketch.getContext("2d");
-    const width = etchASketch.width;
-    const height = etchASketch.height;
-
-    ctx.lineWidth = 2;
-
-    let drawing = false;
-
-    function getRandomColor() {
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    function draw(e) {
-        if(!drawing) return;
-
-        const rect = etchASketch.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        ctx.fillStyle = getRandomColor();
-        ctx.fillRect(x, y, 10, 10);
-    }
-
-    function startDrawing() {
-        drawing = true;
-    }
-
-    function stopDrawing() {
-        drawing = false;
-        ctx.beginPath();
-    }
-
-    function resetDrwaing() {
-        ctx.clearRect(0, 0, width, height);
-    }
-
-    etchASketch.addEventListener('mousedown', startDrawing);
-    etchASketch.addEventListener('mouseup', stopDrawing);
-    etchASketch.addEventListener('mousemove', draw);
-    resetbutton.addEventListener('click', resetDrwaing);
-
-});
