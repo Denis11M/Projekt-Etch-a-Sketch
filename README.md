@@ -40,3 +40,10 @@ Also check out prompts.
 You should be able to enter 64 and have a brand new 64x64 grid pop up without changing the total amount of pixels used.
 
 Push your project to GitHub!
+
+# Extra credit:
+Transform the behavior of a square when interacting with the mouse by introducing a series of modifications.
+
+Rather than squares being the same color throughout the grid, randomize the squares’ RGB values with each interaction.
+
+Additionally, implement a progressive darkening effect where each interaction darkens the square by 10%. The goal is to achieve a fully black (or completely colored) square in only ten interactions.
